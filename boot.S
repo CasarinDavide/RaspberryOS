@@ -1,3 +1,5 @@
+	#include "memory_managment.h"
+
 	.cpu cortex-a53
 
 	.data 
@@ -9,12 +11,8 @@
 
 		// TODO check hardware for init
 
-
 		// init stack pointer 
-		adr x5,_start
-		// stack must be aligned to 16bytes for ARM convention
-		sub x5, x5, #16
-		mov sp,x5
+		mov sp,#LOW_MEMORY
 		
 		// clear bss section
 		// bss sections contains all the non-init variables and global variables
@@ -30,7 +28,7 @@
 	_clear_bss_loop:
 		// this code implies to have a 64 bit aligned __bss_size
 		str xzr, [x5]            
-		add x5, x5, #64          // put forward of 64 byte
+		add x5, x5, #64          // put forward of 64 bit 
 		subs w6, w6, #64         // decrese BSS size of 64 bit
 		b.ge _clear_bss_loop     // loop if >= 0
 
